@@ -27,16 +27,21 @@ class Pessoa:
 class main:
     def __init__(self):
         self.__pessoas = []
+        self.__sintomas = []
+        self.__cidades = ['Recife', 'Olinda', 'Paulista', 'Caruaru', 'Belo Jardim', 'Garanhuns', 'São João', 'Petrolina', 'Saloá', 'Outras']
     
     def menu(self):
         self.load_file()
-        
-        # EXECUTA PRIMEIRO SÓ A LINHA 36, DEPOIS SÓ A LINHA 37
-        
-        # pessoa_teste = Pessoa('Caio', '18', 'Garanhuns', ['dor de cabeça', 'febre'])
-        # pessoa_teste = Pessoa('Lucas', '25', 'Recife', ['diarréia', 'falta de paladar'])
-        self.__pessoas.append(pessoa_teste)
-        self.save_file()
+        opcao = -1
+        while opcao != 0:
+            if opcao == 1:
+                self.register()
+                self.save_file()
+            if opcao == 2:
+                self.show()
+            self.break_lines()
+            opcao = int(input('Selecione uma opção: \n\n1- Cadastro de infectado \n2- Ver dados gerais \n0- Sair\n'))
+            self.break_lines()
         
     def load_file(self):
         try:
@@ -55,6 +60,40 @@ class main:
         pessoas_file.write(pessoas)
         pessoas_file.close()
     
+    def register(self):
+        print('----Cadastro de infectado Covid-19----\n\n')
+        nome = input('Seu Nome: ')
+        idade = int(input('Sua idade: '))
+        cidade = self.select_city()
+        sintomas = []
+        if len(sintomas) == 0:
+            sintomas.append('Assintomático')
+        pessoa_teste = Pessoa(nome, idade, cidade, sintomas)
+        self.__pessoas.append(pessoa_teste)
+    
+    def select_city(self):
+        selected = ''
+        opcao = -1
+        print('Sua Cidade:')
+        index = 0
+        for cidade in self.__cidades:
+            print(index+1,'-', cidade)
+            index+=1
+        opcao = int(input(''))
+        if opcao > 0:
+            selected = self.__cidades[opcao-1]
+        return selected
+
+    def show(self):
+        matriz = []
+        print('----Dados Gerais da Covid-19----\n\n')
+        for pessoa in self.__pessoas:
+            matriz.append([pessoa.get_nome(), pessoa.get_idade(), pessoa.get_cidade()])
+        print(matriz)
+
+    def break_lines(self):
+        print('\n\n===============================\n\n')
+
 Main = main()
 
 Main.menu()
