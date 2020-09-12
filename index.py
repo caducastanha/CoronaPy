@@ -161,7 +161,7 @@ class main:
                             total += 1
                     quantidades.append(count)
                 for cidade in range(len(self.__cidades)):
-                    print(quantidades[cidade - 1], 'infectados |', (quantidades[cidade - 1]*100)/total, '% |', self.__cidades[cidade - 1])
+                    print(quantidades[cidade - 1], 'infectados |', round((quantidades[cidade - 1]*100)/total),'% |', self.__cidades[cidade - 1])
             
             if opcao == 2:
                 try:
@@ -191,7 +191,77 @@ class main:
             self.break_lines()
             
     def symptoms(self):
-        pass
+        opcao = -1
+        while opcao != 0:
+            
+            if opcao == 1:
+                print('RECORRÊNCIA DE SINTOMAS: (FILTRO: GERAL)')
+                print('RECORRÊNCIA | PERCENTUAL | SINTOMA')
+                recorrencias = []
+                total = 0
+                for sintoma in self.__sintomas:
+                    count = 0
+                    for pessoa in self.__pessoas:
+                        for sintoma_pessoa in pessoa.get_sintomas():
+                            if sintoma_pessoa == sintoma:
+                                count += 1
+                                total += 1
+                    recorrencias.append(count)
+                for sintoma in range(len(self.__sintomas)):
+                    print(recorrencias[sintoma - 1], 'recorrencias |', round((recorrencias[sintoma - 1]*100)/total),'% |', self.__sintomas[sintoma - 1])
+            
+            if opcao == 2:
+                try:
+                    de = int(input('A partir de quantos anos? \n'))
+                    ate = int(input('Até quantos anos? \n'))
+                    print(f'RECORRÊNCIA DE SINTOMAS: (FILTRO: IDADE(DE {str(de)} ATÉ {str(ate)}))')
+                    recorrencias = []
+                    total = 0
+                    for sintoma in self.__sintomas:
+                        count = 0
+                        for pessoa in self.__pessoas:
+                            for sintoma_pessoa in pessoa.get_sintomas():
+                                if sintoma_pessoa == sintoma and int(pessoa.get_idade()) >= de and int(pessoa.get_idade()) <= ate:
+                                    count += 1
+                                    total += 1
+                        recorrencias.append(count)
+                    if total == 0:
+                        print('\nNão há registros segundo esses parâmetros.')
+                    else:
+                        print('RECORRÊNCIA | PERCENTUAL | SINTOMA')
+                        for sintoma in range(len(self.__sintomas)):
+                            print(recorrencias[sintoma - 1], 'recorrencias |', round((recorrencias[sintoma - 1]*100)/total),'% |', self.__sintomas[sintoma - 1])
+                except:
+                    print('Insira idades válidas!')
+
+            if opcao == 3:
+                print('RECORRÊNCIA DE SINTOMAS: (FILTRO: CIDADE')
+                for cidade in self.__cidades:
+                    recorrencias = []
+                    total = 0
+                    isCity = False
+                    for sintoma in self.__sintomas:
+                        count = 0
+                        for pessoa in self.__pessoas:
+                            for sintoma_pessoa in pessoa.get_sintomas():
+                                if sintoma_pessoa == sintoma and pessoa.get_cidade() == cidade:
+                                    count += 1
+                                    total += 1
+                                    isCity = True
+                        recorrencias.append(count)
+                    if isCity:
+                        if total == 0:
+                            print('\nNão há registros segundo esses parâmetros.')
+                        else:
+                            print(f'\n| {str(cidade.upper())} |\n')
+                            print('RECORRÊNCIA | PERCENTUAL | SINTOMA')
+                            for sintoma in range(len(self.__sintomas)):
+                                print(recorrencias[sintoma - 1], 'recorrencias |', round((recorrencias[sintoma - 1]*100)/total),'% |', self.__sintomas[sintoma - 1])
+               
+
+            self.break_lines()
+            opcao = int(input('RECORRÊNCIA DE SINTOMAS: \n\n1 - Geral \n2 - Por idade\n3 - Por cidade\n0 - Voltar\n'))
+            self.break_lines()
             
     def break_lines(self):
         print('\n\n===============================\n\n')
