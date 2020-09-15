@@ -32,16 +32,18 @@ class main:
     
     def menu(self):
         self.load_file()
-        opcao = -1
-        while opcao != 0:
-            if opcao == 1:
+        opcao = ''
+        while opcao != '0':
+            self.break_lines()
+            opcao = input('Selecione uma opção: \n\n1- Cadastro de infectado \n2- Ver estatísticas \n0- Sair\n')
+            self.break_lines()
+            if opcao == '1':
                 self.register()
                 self.save_file()
-            if opcao == 2:
+            elif opcao == '2':
                 self.estatisticas()
-            self.break_lines()
-            opcao = int(input('Selecione uma opção: \n\n1- Cadastro de infectado \n2- Ver estatísticas \n0- Sair\n'))
-            self.break_lines()
+            elif opcao != '0':
+                print('Insira uma opção válida!')
         
     def load_file(self):
         try:
@@ -134,21 +136,27 @@ class main:
                 return sintomas_listados
 
     def estatisticas(self):
-        opcao = -1
-        while opcao != 0:
-            if opcao == 1:
+        opcao = ''
+        while opcao != '0':
+            self.break_lines()
+            opcao = input('Selecione uma opção: \n\n1 - Quantidade de infectados por cidade \n2 - Recorrência de sintomas\n0 - Voltar \n')
+            self.break_lines()
+            if opcao == '1':
                 self.infecteds()
-            if opcao == 2:
+            elif opcao == '2':
                 self.symptoms()
-            self.break_lines()
-            opcao = int(input('Selecione uma opção: \n\n1 - Quantidade de infectados por cidade \n2 - Recorrência de sintomas\n0 - Voltar \n'))
-            self.break_lines()
+            elif opcao != '0':
+                print('Insira uma opção válcfhn cfgida!')
 
     def infecteds(self):
-        opcao = -1
-        while opcao != 0:
+        opcao = ''
+        while opcao != '0':
             
-            if opcao == 1:
+            self.break_lines()
+            opcao = input('QUANTIDADE DE INFECTADOS POR CIDADE: \n\n1 - Geral \n2 - Por idade\n0 - Voltar\n')
+            self.break_lines()
+            
+            if opcao == '1':
                 print('QUANTIDADE DE INFECTADOS POR CIDADE: (FILTRO: GERAL)')
                 print('QUANTIDADE | PERCENTUAL | CIDADE')
                 quantidades = []
@@ -163,7 +171,7 @@ class main:
                 for cidade in range(len(self.__cidades)):
                     print(quantidades[cidade - 1], 'infectados |', round((quantidades[cidade - 1]*100)/total),'% |', self.__cidades[cidade - 1])
             
-            if opcao == 2:
+            elif opcao == '2':
                 try:
                     de = int(input('A partir de quantos anos? \n'))
                     ate = int(input('Até quantos anos? \n'))
@@ -185,45 +193,53 @@ class main:
                             print(quantidades[cidade - 1], 'infectados |', (quantidades[cidade - 1]*100)/total, '% |', self.__cidades[cidade - 1])
                 except:
                     print('Insira idades válidas!')
-
-            self.break_lines()
-            opcao = int(input('QUANTIDADE DE INFECTADOS POR CIDADE: \n\n1 - Geral \n2 - Por idade\n0 - Voltar\n'))
-            self.break_lines()
+            
+            elif opcao != '0':
+                print('Insira uma opção válida!')
             
     def symptoms(self):
-        opcao = -1
-        while opcao != 0:
-            
-            if opcao == 1:
+        opcao = ''
+        while opcao != '0':
+            self.break_lines()
+            opcao = input('RECORRÊNCIA DE SINTOMAS: \n\n1 - Geral \n2 - Por idade\n3 - Por cidade\n0 - Voltar\n')
+            self.break_lines()
+
+            if opcao == '1':
                 print('RECORRÊNCIA DE SINTOMAS: (FILTRO: GERAL)')
                 print('RECORRÊNCIA | PERCENTUAL | SINTOMA')
                 recorrencias = []
                 total = 0
+                
+                for pessoa in self.__pessoas:
+                    if 'Assintomático' not in pessoa.get_sintomas():
+                        total += 1
+                
                 for sintoma in self.__sintomas:
                     count = 0
                     for pessoa in self.__pessoas:
-                        for sintoma_pessoa in pessoa.get_sintomas():
-                            if sintoma_pessoa == sintoma:
-                                count += 1
-                                total += 1
+                        if sintoma in pessoa.get_sintomas():
+                            count += 1
                     recorrencias.append(count)
                 for sintoma in range(len(self.__sintomas)):
                     print(recorrencias[sintoma - 1], 'recorrencias |', round((recorrencias[sintoma - 1]*100)/total),'% |', self.__sintomas[sintoma - 1])
             
-            if opcao == 2:
+            elif opcao == '2':
                 try:
                     de = int(input('A partir de quantos anos? \n'))
                     ate = int(input('Até quantos anos? \n'))
                     print(f'RECORRÊNCIA DE SINTOMAS: (FILTRO: IDADE(DE {str(de)} ATÉ {str(ate)}))')
                     recorrencias = []
                     total = 0
+                    
+                    for pessoa in self.__pessoas:
+                        if int(pessoa.get_idade()) >= de and int(pessoa.get_idade()) <= ate:
+                            total += 1
+                    
                     for sintoma in self.__sintomas:
                         count = 0
                         for pessoa in self.__pessoas:
-                            for sintoma_pessoa in pessoa.get_sintomas():
-                                if sintoma_pessoa == sintoma and int(pessoa.get_idade()) >= de and int(pessoa.get_idade()) <= ate:
-                                    count += 1
-                                    total += 1
+                            if sintoma in pessoa.get_sintomas() and int(pessoa.get_idade()) >= de and int(pessoa.get_idade()) <= ate:
+                                count += 1
                         recorrencias.append(count)
                     if total == 0:
                         print('\nNão há registros segundo esses parâmetros.')
@@ -234,19 +250,23 @@ class main:
                 except:
                     print('Insira idades válidas!')
 
-            if opcao == 3:
+            elif opcao == '3':
                 print('RECORRÊNCIA DE SINTOMAS: (FILTRO: CIDADE')
                 for cidade in self.__cidades:
                     recorrencias = []
                     total = 0
                     isCity = False
+                    
+                    for pessoa in self.__pessoas:
+                        if pessoa.get_cidade() == cidade:
+                            total += 1
+                    
                     for sintoma in self.__sintomas:
                         count = 0
                         for pessoa in self.__pessoas:
                             for sintoma_pessoa in pessoa.get_sintomas():
                                 if sintoma_pessoa == sintoma and pessoa.get_cidade() == cidade:
                                     count += 1
-                                    total += 1
                                     isCity = True
                         recorrencias.append(count)
                     if isCity:
@@ -257,11 +277,9 @@ class main:
                             print('RECORRÊNCIA | PERCENTUAL | SINTOMA')
                             for sintoma in range(len(self.__sintomas)):
                                 print(recorrencias[sintoma - 1], 'recorrencias |', round((recorrencias[sintoma - 1]*100)/total),'% |', self.__sintomas[sintoma - 1])
-               
-
-            self.break_lines()
-            opcao = int(input('RECORRÊNCIA DE SINTOMAS: \n\n1 - Geral \n2 - Por idade\n3 - Por cidade\n0 - Voltar\n'))
-            self.break_lines()
+             
+            elif opcao != '0':
+                print('Insira uma opção válida!')
             
     def break_lines(self):
         print('\n\n===============================\n\n')
