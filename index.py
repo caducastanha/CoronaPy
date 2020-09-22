@@ -146,7 +146,7 @@ class main:
             elif opcao == '2':
                 self.symptoms()
             elif opcao != '0':
-                print('Insira uma opção válcfhn cfgida!')
+                print('Insira uma opção válida!')
 
     def infecteds(self):
         opcao = ''
