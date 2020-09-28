@@ -27,7 +27,7 @@ class Pessoa:
 class main:
     def __init__(self):
         self.__pessoas = []
-        self.__sintomas = ['Febre', 'Tosse seca', 'Cansaço', 'Dor de cabeça', 'Dores e desconfortos', 'Perda de paladar', 'Dificuldade de respirar', 'Dor no peito', 'Diarréia']
+        self.__sintomas = ['Febre', 'Tosse seca', 'Cansaço', 'Dor de cabeça', 'Dores e desconfortos', 'Perda de paladar', 'Dificuldade de respirar', 'Dor no peito', 'Diarréia', 'Assintomático']
         self.__cidades = ['Recife', 'Olinda', 'Paulista', 'Caruaru', 'Belo Jardim', 'Garanhuns', 'São João', 'Petrolina', 'Saloá', 'Outras']
     
     def menu(self):
@@ -119,11 +119,11 @@ class main:
         print('\n0 - Concluir\n')
         
         sintoma = input('Digite o número referente a um de seus sintomas: ')
-        if sintoma not in '123456789' and sintoma != '0':
+        if sintoma not in '12345678910' and sintoma != '0':
             print('Sintoma inválido')
             self.select_sintomas(sintomas_listados, sintomas_nao_listados)
             return sintomas_listados
-        elif sintoma == '0':
+        elif sintoma == '0' or sintoma == '10':
             return sintomas_listados
         else:
             sintomas_listados.append(sintomas_nao_listados[int(sintoma) - 1])
@@ -274,16 +274,16 @@ class main:
                             print('\nNão há registros segundo esses parâmetros.')
                         else:
                             print(f'\n| {str(cidade.upper())} |\n')
-                            bidimencional =[ ['RECORRÊNCIA', 'PERCENTUAL', 'SINTOMA']]
+                            bidimensional =[ ['RECORRÊNCIA', 'PERCENTUAL', 'SINTOMA']]
                             for sintoma in range(len(self.__sintomas)):
                                 linha = []
                                 linha.append(f'{ str(recorrencias[sintoma - 1])} recorrencias')
                                 linha.append(f'{str(round((recorrencias[sintoma - 1]*100)/total))} %')
                                 linha.append(self.__sintomas[sintoma - 1])
-                                bidimencional.append(linha)
+                                bidimensional.append(linha)
                             
-                            for linha in range(len(bidimencional)):
-                                print(bidimencional[linha][0], '|', bidimencional[linha][1], '|', bidimencional[linha][2])
+                            for linha in range(len(bidimensional)):
+                                print(bidimensional[linha][0], '|', bidimensional[linha][1], '|', bidimensional[linha][2])
 
             elif opcao != '0':
                 print('Insira uma opção válida!')
