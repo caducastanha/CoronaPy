@@ -274,10 +274,17 @@ class main:
                             print('\nNão há registros segundo esses parâmetros.')
                         else:
                             print(f'\n| {str(cidade.upper())} |\n')
-                            print('RECORRÊNCIA | PERCENTUAL | SINTOMA')
+                            bidimencional =[ ['RECORRÊNCIA', 'PERCENTUAL', 'SINTOMA']]
                             for sintoma in range(len(self.__sintomas)):
-                                print(recorrencias[sintoma - 1], 'recorrencias |', round((recorrencias[sintoma - 1]*100)/total),'% |', self.__sintomas[sintoma - 1])
-             
+                                linha = []
+                                linha.append(f'{ str(recorrencias[sintoma - 1])} recorrencias')
+                                linha.append(f'{str(round((recorrencias[sintoma - 1]*100)/total))} %')
+                                linha.append(self.__sintomas[sintoma - 1])
+                                bidimencional.append(linha)
+                            
+                            for linha in range(len(bidimencional)):
+                                print(bidimencional[linha][0], '|', bidimencional[linha][1], '|', bidimencional[linha][2])
+
             elif opcao != '0':
                 print('Insira uma opção válida!')
             
