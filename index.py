@@ -125,6 +125,17 @@ class main:
             return sintomas_listados
         elif sintoma == '0' or sintoma == '10':
             return sintomas_listados
+        elif sintoma == str(len(sintomas_nao_listados)):
+            choice = input('Se você prosseguir, todos os sintomas inseridos serão apagados. Deseja continuar? (s/n)\n')
+            if choice == 's' or choice == 'S':
+                sintomas_listados.clear()
+                return sintomas_listados
+            elif choice == 'n' or choice == 'N':
+                self.select_sintomas(sintomas_listados, sintomas_nao_listados)
+            else:
+                print('Opção inválida')
+                self.select_sintomas(sintomas_listados, sintomas_nao_listados)
+
         else:
             sintomas_listados.append(sintomas_nao_listados[int(sintoma) - 1])
             sintomas_nao_listados.pop(int(sintoma) - 1)
@@ -208,11 +219,12 @@ class main:
                 print('RECORRÊNCIA DE SINTOMAS: (FILTRO: GERAL)')
                 print('RECORRÊNCIA | PERCENTUAL | SINTOMA')
                 recorrencias = []
-                total = 0
+                total = len(self.__pessoas)
+                # total = 0
                 
-                for pessoa in self.__pessoas:
-                    if 'Assintomático' not in pessoa.get_sintomas():
-                        total += 1
+                # for pessoa in self.__pessoas:
+                #     if 'Assintomático' not in pessoa.get_sintomas():
+                #         total += 1
                 
                 for sintoma in self.__sintomas:
                     count = 0
@@ -251,7 +263,7 @@ class main:
                     print('Insira idades válidas!')
 
             elif opcao == '3':
-                print('RECORRÊNCIA DE SINTOMAS: (FILTRO: CIDADE')
+                print('RECORRÊNCIA DE SINTOMAS: (FILTRO: CIDADE)')
                 for cidade in self.__cidades:
                     recorrencias = []
                     total = 0
