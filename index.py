@@ -1,35 +1,35 @@
 class Pessoa:
-    
+
     def __init__(self, nome, idade, cidade, sintomas):
         self.__nome = nome
         self.__idade = idade
         self.__cidade = cidade
         self.__sintomas = sintomas
-    
+
     def get_nome(self):
         return self.__nome
-    
+
     def get_idade(self):
         return self.__idade
-    
+
     def get_cidade(self):
         return self.__cidade
-    
+
     def get_sintomas(self):
         return self.__sintomas
-    
+
     def print_pessoa(self):
         return(f'{self.__nome},{self.__idade},{self.__cidade},{self.print_sintomas()}')
-    
+
     def print_sintomas(self):
         return('|'.join(sintoma for sintoma in self.__sintomas))
-    
+
 class main:
     def __init__(self):
         self.__pessoas = []
         self.__sintomas = ['Febre', 'Tosse seca', 'Cansaço', 'Dor de cabeça', 'Dores e desconfortos', 'Perda de paladar', 'Dificuldade de respirar', 'Dor no peito', 'Diarréia', 'Assintomático']
         self.__cidades = ['Recife', 'Olinda', 'Paulista', 'Caruaru', 'Belo Jardim', 'Garanhuns', 'São João', 'Petrolina', 'Saloá', 'Outras']
-    
+
     def menu(self):
         self.load_file()
         opcao = ''
@@ -44,7 +44,7 @@ class main:
                 self.estatisticas()
             elif opcao != '0':
                 print('Insira uma opção válida!')
-        
+
     def load_file(self):
         try:
             pessoas_file = open('pessoas_file.txt', 'r')
@@ -55,13 +55,13 @@ class main:
                 new_pessoa = Pessoa(pessoa_arrayed[0], pessoa_arrayed[1], pessoa_arrayed[2], sintomas_arrayed)
                 self.__pessoas.append(new_pessoa)
         except : pass
-    
+
     def save_file(self):
         pessoas_file = open('pessoas_file.txt', 'w')
         pessoas = '\\'.join(pessoa.print_pessoa() for pessoa in self.__pessoas)
         pessoas_file.write(pessoas)
         pessoas_file.close()
-    
+
     def register(self):
         print('----Cadastro de infectado Covid-19----\n\n')
         nome = input('Seu Nome: ')
@@ -72,7 +72,7 @@ class main:
             sintomas.append('Assintomático')
         new_pessoa = Pessoa(nome, idade, cidade, sintomas)
         self.__pessoas.append(new_pessoa)
-    
+
     def set_idade(self):
         idade_integer = True
         idade_positive = True
@@ -86,9 +86,9 @@ class main:
                 idade_integer = False
             except:
                 print('Digite uma idade válida!')
-        
+
         return idade
-    
+
     def select_city(self):
         selected = ''
         opcao = -1
@@ -103,21 +103,21 @@ class main:
         elif opcao not in '123456789' and opcao != '10':
             selected = self.__cidades[-1]
         return selected
-    
+
     def select_sintomas(self, sintomas_listados, sintomas_nao_listados):
-        
+
         print('Sintomas já relacionados:')
         for sintoma in sintomas_listados:
             print(sintoma)
         print('')
-        
+
         print('Sintomas não relacionados:')
         index = 0
         for sintoma in sintomas_nao_listados:
             print(index + 1, '-', sintoma)
             index += 1
         print('\n0 - Concluir\n')
-        
+
         sintoma = input('Digite o número referente a um de seus sintomas: ')
         if sintoma not in '12345678910' and sintoma != '0':
             print('Sintoma inválido')
@@ -162,11 +162,11 @@ class main:
     def infecteds(self):
         opcao = ''
         while opcao != '0':
-            
+
             self.break_lines()
             opcao = input('QUANTIDADE DE INFECTADOS POR CIDADE: \n\n1 - Geral \n2 - Por idade\n0 - Voltar\n')
             self.break_lines()
-            
+
             if opcao == '1':
                 print('QUANTIDADE DE INFECTADOS POR CIDADE: (FILTRO: GERAL)')
                 print('QUANTIDADE | PERCENTUAL | CIDADE')
@@ -181,7 +181,7 @@ class main:
                     quantidades.append(count)
                 for cidade in range(len(self.__cidades)):
                     print(quantidades[cidade - 1], 'infectados |', round((quantidades[cidade - 1]*100)/total),'% |', self.__cidades[cidade - 1])
-            
+
             elif opcao == '2':
                 try:
                     de = int(input('A partir de quantos anos? \n'))
@@ -204,10 +204,10 @@ class main:
                             print(quantidades[cidade - 1], 'infectados |', (quantidades[cidade - 1]*100)/total, '% |', self.__cidades[cidade - 1])
                 except:
                     print('Insira idades válidas!')
-            
+
             elif opcao != '0':
                 print('Insira uma opção válida!')
-            
+
     def symptoms(self):
         opcao = ''
         while opcao != '0':
@@ -220,12 +220,7 @@ class main:
                 print('RECORRÊNCIA | PERCENTUAL | SINTOMA')
                 recorrencias = []
                 total = len(self.__pessoas)
-                # total = 0
-                
-                # for pessoa in self.__pessoas:
-                #     if 'Assintomático' not in pessoa.get_sintomas():
-                #         total += 1
-                
+
                 for sintoma in self.__sintomas:
                     count = 0
                     for pessoa in self.__pessoas:
@@ -234,7 +229,7 @@ class main:
                     recorrencias.append(count)
                 for sintoma in range(len(self.__sintomas)):
                     print(recorrencias[sintoma - 1], 'recorrencias |', round((recorrencias[sintoma - 1]*100)/total),'% |', self.__sintomas[sintoma - 1])
-            
+
             elif opcao == '2':
                 try:
                     de = int(input('A partir de quantos anos? \n'))
@@ -242,11 +237,11 @@ class main:
                     print(f'RECORRÊNCIA DE SINTOMAS: (FILTRO: IDADE(DE {str(de)} ATÉ {str(ate)}))')
                     recorrencias = []
                     total = 0
-                    
+
                     for pessoa in self.__pessoas:
                         if int(pessoa.get_idade()) >= de and int(pessoa.get_idade()) <= ate:
                             total += 1
-                    
+
                     for sintoma in self.__sintomas:
                         count = 0
                         for pessoa in self.__pessoas:
@@ -268,11 +263,11 @@ class main:
                     recorrencias = []
                     total = 0
                     isCity = False
-                    
+
                     for pessoa in self.__pessoas:
                         if pessoa.get_cidade() == cidade:
                             total += 1
-                    
+
                     for sintoma in self.__sintomas:
                         count = 0
                         for pessoa in self.__pessoas:
@@ -293,13 +288,13 @@ class main:
                                 linha.append(f'{str(round((recorrencias[sintoma - 1]*100)/total))} %')
                                 linha.append(self.__sintomas[sintoma - 1])
                                 bidimensional.append(linha)
-                            
+
                             for linha in range(len(bidimensional)):
                                 print(bidimensional[linha][0], '|', bidimensional[linha][1], '|', bidimensional[linha][2])
 
             elif opcao != '0':
                 print('Insira uma opção válida!')
-            
+
     def break_lines(self):
         print('\n\n===============================\n\n')
 
